@@ -1,6 +1,9 @@
 <?php
 include_once "conexaoSQL.php";
 include_once "../Config.php";
+include_once "testLogin.php";
+
+$tecnicoLogado = tecnicoLogado();
 
 /* Gera o proximo contador */
 $sql = "SELECT TOP 1
@@ -14,24 +17,11 @@ while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
 }
 
 
-function geraReq($conn, $local, $email, $ultcont, $serie, $whatsapp, $solicitante, $defeito, $tonerPB, $preto, $azul, $amarelo, $magenta, $outro, $periodo, $operacaoVend, $statusVend)
+function geraReq($conn, $serie, $obs)
 {
-    global $ultContGer, $CodVendedor, $Condicao;
+    global $ultContGer, $tecnicoLogado, $obs;
 
-    /* Trata o numero de caracteres que será inserido no campo TB02115_CELULAR */
-    $whatsapp = substr($whatsapp, 0, 11);
-
-    /* Trata o numero de caracteres que será inserido no campo TB02115_LOCAL */
-    $local = substr($local, 0, 200);
-
-    /* Trata o numero de caracteres que será inserido no campo TB02115_EMAIL */
-    $email = substr($email, 0, 200);
-
-    /* Trata o numero de caracteres que será inserido no campo TB02115_SOLICITANTE */
-    $solicitante = substr($solicitante, 0, 30);
-
-    /* Trata o numero de caracteres que será inserido no campo TB02115_SOLICITANTE */
-    $ultcont = substr($ultcont, 0, 10);
+   
 
     /* Verifica se e patrimonio ou serie antes de gravar */
     $sql = "SELECT TOP 1 
@@ -75,33 +65,33 @@ function geraReq($conn, $local, $email, $ultcont, $serie, $whatsapp, $solicitant
                 TB02018_CONTTOTAL,
                 TB02018_OPCAD)
             (SELECT 
-                '$ultContGer',
-                GETDATE(),
-                GETDATE(),
-                GETDATE(),
-                TB02111_CODEMP,
-                TB02111_CODCLI,
-                '$CodVendedor',
-                '$operacaoVend',
-                '$Condicao',
-                '$statusVend',
-                'A',
-                3,
-                TB02111_NOME,
-                '$whatsapp',
-                TB02111_CODIGO,
-                '$email',
-                TB02112_CODSITE,
-                '$serie',
-                'Melhor periodo para visita: $periodo \nLocal ou setor: $local \nTonerPB: $tonerPB \n\nTONER COLORIDO \nPreto: $preto, \nAzul: $azul, \nAmarelo: $amarelo, \nMagenta: $magenta, \nOutro: $outro \nOBS: $defeito',
-                '$ultcont',
-                '$solicitante'
+                '$ultContGer', --TB02018_CODIGO, 
+                GETDATE(),--TB02018_DTCAD,
+                GETDATE(),--TB02018_DATAEXEC,
+                GETDATE(),--TB02018_DATA,
+                '00',--TB02018_CODEMP,
+                '00000000',--TB02018_CODCLI,  pegar fabricio
+                '0000',--TB02018_VEND,  pegar fabricio
+                '00',--TB02018_TIPODESC, pegar fabricio
+                '',--TB02018_CONDPAG,
+                '',--TB02018_STATUS,
+                'A',--TB02018_SITUACAO,
+                3,--TB02018_OPERACAO,
+                '',--TB02018_NOME, --nome do consumidor final
+                null,--TB02018_FONE,
+                '',--TB02018_CONTRATO, pegar fabricio
+                '',--TB02018_EMAIL, 
+                '',--TB02018_CODSITE, pegar fabricio
+                '',--TB02018_NUMSERIE,
+                ?,--TB02018_OBS,
+                0,--TB02018_CONTTOTAL,
+                ?--TB02018_OPCAD
+            
                  
-            FROM TB02112
-            LEFT JOIN TB02111 ON TB02111_CODIGO = TB02112_CODIGO
-            WHERE TB02112_SITUACAO = 'A'
-            AND TB02111_TIPOCONTR = 'L'
-            AND TB02112_NUMSERIE = '$serie')
+           FROM TB02054
+            LEFT JOIN TB00012 ON TB00012_CODIGO = TB02054_CODEMP
+            WHERE TB02054_NUMSERIE = ?
+            AND TB02054_QTPROD > TB02054_QTPRODS)
 
             UPDATE 
                 TB00002 
@@ -111,7 +101,7 @@ function geraReq($conn, $local, $email, $ultcont, $serie, $whatsapp, $solicitant
                 TB00002_tabela = 'TB02018R'
 
     ";
-    $stmt = sqlsrv_query($conn, $sql);
+    $stmt = sqlsrv_query($conn, $sql, array($obs, $tecnicoLogado, $serie));
     if ($stmt === false) {
         die(print_r(sqlsrv_errors(), true));
         //print ('Erro OS não gravada!!!');

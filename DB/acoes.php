@@ -16,9 +16,12 @@ while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
     $novaOS = $row['novaOS'];
 }
 
-function gravaOS($conn, $serie)
+function gravaOS($conn, $serie, $obs)
 {
-    global $tecLogado, $novaOS;
+    global $tecLogado, $novaOS, $obs;
+
+
+    if($obs == '' || $obs == NULL) {$obsPreench = 'OS aberta por aplicação web que atualiza os equipamentos'; } else {$obsPreench = $obs;};
 
     /* Verifica se e patrimonio ou serie antes de gravar */
     $sql = "SELECT TOP 1 
@@ -95,7 +98,7 @@ function gravaOS($conn, $serie)
                 /* 16: TB02115_DATA */ GETDATE(), 
                 /* 17: TB02115_SITUACAO */ 'A', 
                 /* 18: TB02115_CODEMP */ ?, 
-                /* 19: TB02115_OBS */ 'Os aberta por aplicação web que atualiza os equipamentos', 
+                /* 19: TB02115_OBS */ ?, 
                 /* 20: TB02115_NOME */ '', 
                 /* 21: TB02115_CONTRATO */ 'ESTOQUE', 
                 /* 22: TB02115_SOLICITANTE */ 'APP Web AtualizaEquip',
@@ -113,7 +116,7 @@ function gravaOS($conn, $serie)
             AND TB02054_QTPROD > TB02054_QTPRODS
         ";
 
-    $stmt = sqlsrv_query($conn, $sql, array($novaOS, $tecLogado, '00', $serie));
+    $stmt = sqlsrv_query($conn, $sql, array($novaOS, $tecLogado, '00', $serie, $obsPreench));
     if ($stmt === false) {
         return [
             'success' => false,
