@@ -65,74 +65,70 @@ function gravaOS($conn, $estado, $local, $email, $contpb, $serie, $whatsapp, $so
         $Situacao = $row['Situacao'];
     }
 
-    $sql = "INSERT INTO TB02115( 
-                TB02115_CODIGO,
-                TB02115_DTCAD,
-                TB02115_ESTADO,
-                TB02115_LOCAL,
-                TB02115_EMAIL,
-                TB02115_CONTPB,
-                TB02115_NUMSERIE,
-                TB02115_CELULAR,
-                TB02115_SOLICITANTE,
-                TB02115_OBS,
-                TB02115_STATUS,
-                TB02115_NOME,
+    $sql = "INSERT INTO TB02115 ( 
+                TB02115_CODIGO, 
+                TB02115_DTCAD, 
+                TB02115_CONTPB, 
+                TB02115_NUMSERIE, 
+                TB02115_STATUS, 
                 TB02115_OPCAD,
-                TB02115_CONTRATO,
-                TB02115_CODEMP,
-                TB02115_CODCLI,
-                TB02115_TIPOINTERV,
-                TB02115_PRODUTO,
-                TB02115_CODTEC,
+                TB02115_CODCLI, 
+                TB02115_TIPOINTERV, 
+                TB02115_PRODUTO, 
+                TB02115_CODTEC, 
                 TB02115_ATENDENTE,
-                TB02115_PREVENTIVA,
-                TB02115_DATA,
-                TB02115_SITUACAO,
+                TB02115_PREVENTIVA, 
+                TB02115_DATA, 
+                TB02115_SITUACAO, 
+                TB02115_CODEMP, 
+                TB02115_OBS, 
+                TB02115_NOME,
+                TB02115_CONTRATO, 
+                TB02115_SOLICITANTE,
                 TB02115_CEP,
                 TB02115_END,
                 TB02115_CIDADE,
                 TB02115_BAIRRO,
                 TB02115_NUM,
-                TB02115_COMP)
-                (
+                TB02115_COMP,
+                TB02115_ORIGEM, 
+                TB02115_LOCAL
+            )
             SELECT TOP 1
-                '$novaOS',
-                GETDATE(),
-                '$estado',
-                '$local', 
-                '$email', 
-                '$contpb', 
-                '$serie', 
-                '$whatsapp',
-                '$solicitante',
-                '$defeito - Periodo para atendimento: $periodo',
-                '$statusInicial',
-                '$motivo',
-                'APP ABERTURA_OS',
-                TB02112_CODIGO,
-                TB02111_CODEMP,
-                TB02111_CODCLI,
-                'I',
-                TB02112_PRODUTO,
-                '0000',
-                'PortalQR',
-                'N',
-                GETDATE(),
-                'A',
-                TB02112_CEP,
-                TB02112_END,
-                TB02112_CIDADE,
-                TB02112_BAIRRO,
-                TB02112_NUM,
-                LEFT(TB02112_COMP, 20)
-            FROM TB02112
-            LEFT JOIN TB02111 ON TB02111_CODIGO = TB02112_CODIGO
-            WHERE TB02112_NUMSERIE = '$serie'
-            AND TB02112_SITUACAO = 'A')
+                /* 1: TB02115_CODIGO */ ?, 
+                /* 2: TB02115_DTCAD */ GETDATE(), 
+                /* 5: TB02115_CONTPB */ 0, 
+                /* 6: TB02115_NUMSERIE */ 0, 
+                /* 8: TB02115_STATUS */ '00', --pegar com o fabricio
+                /* 9: TB02115_OPCAD */ 'PAINEL ABERTURA OS',
+                /* 10: TB02115_CODCLI */ '00000000', 
+                /* 11: TB02115_TIPOINTERV */ 'I', 
+                /* 12: TB02115_PRODUTO */ TB02054_PRODUTO, 
+                /* 13: TB02115_CODTEC */ ?,  -- será o tecnico vinculado na TB01066
+                /* 14: TB02115_ATENDENTE */ 'PAINEL OS',
+                /* 15: TB02115_PREVENTIVA */ 'E', 
+                /* 16: TB02115_DATA */ GETDATE(), 
+                /* 17: TB02115_SITUACAO */ 'A', 
+                /* 18: TB02115_CODEMP */ ?, 
+                /* 19: TB02115_OBS */ 'Os aberta por aplicação web que atualiza os equipamentos', 
+                /* 20: TB02115_NOME */ '', 
+                /* 21: TB02115_CONTRATO */ 'ESTOQUE', 
+                /* 22: TB02115_SOLICITANTE */ 'APP Web AtualizaEquip',
+                /* 23: TB02115_CEP */ TB00012_CEP, 
+                /* 24: TB02115_END */ TB00012_END, 
+                /* 25: TB02115_CIDADE */ TB00012_CIDADE,
+                /* 26: TB02115_BAIRRO */ TB00012_BAIRRO, 
+                /* 27: TB02115_NUM */ TB00012_NUM, 
+                /* 28: TB02115_COMP */ CAST(TB00012_COMP AS VARCHAR(20)),
+                /* 29: TB02115_ORIGEM */ 'E',
+                /* 30: TB02115_LOCAL */ 'ESTOQUE'
+            FROM TB02054
+            LEFT JOIN TB00012 ON TB00012_CODIGO = TB02054_CODEMP
+            WHERE TB02054_NUMSERIE = ?
+            AND TB02054_QTPROD > TB02054_QTPRODS
         ";
 
-    $stmt = sqlsrv_query($conn, $sql);
+    $stmt = sqlsrv_query($conn, $sql, array($novaOS));
     if ($stmt === false) {
         return [
             'success' => false,
