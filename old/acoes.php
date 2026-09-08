@@ -54,17 +54,6 @@ function gravaOS($conn, $estado, $local, $email, $contpb, $serie, $whatsapp, $so
 
     }
 
-    /* Verifica situação */
-    $sql = "SELECT TOP 1 
-                TB02112_SITUACAO Situacao
-            FROM TB02112
-            WHERE TB02112_NUMSERIE = '$serie'
-    ";
-    $stmt = sqlsrv_query($conn, $sql);
-    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-        $Situacao = $row['Situacao'];
-    }
-
     $sql = "INSERT INTO TB02115( 
                 TB02115_CODIGO,
                 TB02115_DTCAD,
@@ -125,7 +114,7 @@ function gravaOS($conn, $estado, $local, $email, $contpb, $serie, $whatsapp, $so
                 TB02112_CIDADE,
                 TB02112_BAIRRO,
                 TB02112_NUM,
-                LEFT(TB02112_COMP, 20)
+                TB02112_COMP
             FROM TB02112
             LEFT JOIN TB02111 ON TB02111_CODIGO = TB02112_CODIGO
             WHERE TB02112_NUMSERIE = '$serie'
@@ -134,23 +123,8 @@ function gravaOS($conn, $estado, $local, $email, $contpb, $serie, $whatsapp, $so
 
     $stmt = sqlsrv_query($conn, $sql);
     if ($stmt === false) {
-        return [
-            'success' => false,
-            'message' => 'Erro ao gravar OS',
-            'error' => sqlsrv_errors()
-        ];
-    } else if ($Situacao == 'I') {
-        return [
-            'success' => false,
-            'message' => 'Equipamento inativo!',
-            'error' => null
-        ];
-    } else {
-        return [
-            'success' => true,
-            'message' => 'Sua OS foi aberta com sucesso!',
-            'error' => null
-        ];
+        //die(print_r(sqlsrv_errors(), true));
+        print ('Erro OS não gravada!!!');
     }
 
 }

@@ -4,6 +4,10 @@ include_once "../DB/conexaoSQL.php";
 include_once "../DB/dados.php";
 include_once "../Config.php";
 
+ini_set('max_input_vars', 3000);
+error_reporting(0);
+ini_set('display_errors', '0');
+
 $serie = $_GET["serie"];
 
 list($estado, $Cliente, $Local, $UltCont, $Email, $Serie, $Tel, $CodEmp) = preenchimento($conn, $serie);

@@ -125,7 +125,7 @@ function gravaOS($conn, $estado, $local, $email, $contpb, $serie, $whatsapp, $so
                 TB02112_CIDADE,
                 TB02112_BAIRRO,
                 TB02112_NUM,
-                LEFT(TB02112_COMP, 20)
+                TB02112_COMP
             FROM TB02112
             LEFT JOIN TB02111 ON TB02111_CODIGO = TB02112_CODIGO
             WHERE TB02112_NUMSERIE = '$serie'

@@ -42,20 +42,7 @@ if (isset($serie)) {
     }
 
     if ($tipoOS != 'N') {
-        $retornoOS = gravaOS($conn, $estado, $local, $email, $contpb, $serie, $whatsapp, $solicitante, $defeito, $periodo);
-
-        if (!$retornoOS['success']) {
-            $mensagem = $retornoOS['message'];
-            $mensage2 = '';
-        
-            // log técnico
-            error_log(print_r($retornoOS['error'], true));
-        } else {
-            $mensagem = $retornoOS['message'];
-
-            $mensage2 = 'Abaixo numero para acompanhamento:';
-        }
-
+        gravaOS($conn, $estado, $local, $email, $contpb, $serie, $whatsapp, $solicitante, $defeito, $periodo);
         /* Pega o ultimo numero de OS aberto */
         $sql = "SELECT TOP 1 
         TB02115_CODIGO numOS 
@@ -124,9 +111,9 @@ if (isset($serie)) {
             <div class="div-save">
                 <form class="form-voltar" id="form-voltar" action="<?= $url ?>/inputSerie.php">
                     <!-- <img src="../img/logo.jpg" alt="logo"> -->
-                    <p class="OSCriadaTx"><?= $mensagem ?></p>
-                    <p class="OSCriadaTx"><?= $mensage2 ?></p>
-                    <h1><b class="OSCriada"><?php if($mensage2 !== '') {echo $numOS;} else {}  ?></b></h1>
+                    <p class="OSCriadaTx">Sua OS foi aberta com sucesso!</p>
+                    <p class="OSCriadaTx">Abaixo numero para acompanhamento:</p>
+                    <h1><b class="OSCriada"><?= $numOS ?></b></h1>
                     <button onclick="window.location.reload()" type="submit" class="popup-btn">Fechar</button>
                 </form>
             </div>
