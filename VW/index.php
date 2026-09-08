@@ -43,7 +43,7 @@ if (indentificaProd($conn, $serie) != '1') {
             <img src="../img/logo.jpg" alt="logo">
             <div class="btn-solic-btn">
             </div>
-            <h1 class="titulos">Atualização de Equipamentos</h1>
+            <h1 class="titulos">ATUALIZAÇÃO DE EQUIPAMENTOS</h1>
             <div class="buttons-forms">
                 <button class="btn-req" id="btn-req" style="color: black; opacity: 0.4;"
                     onClick="window.location='<?= $url ?>/index.php?serie=<?= $serie ?>';" type="submit"
