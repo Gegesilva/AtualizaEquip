@@ -1,5 +1,8 @@
 <?php
 include_once "../config.php";
+include_once "testLogin.php";
+
+ $tecLogado = tecnicoLogado();
 
 /* Gera o proximo numero de OS */
 $sql = "SELECT TOP 1
@@ -15,7 +18,7 @@ while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
 
 function gravaOS($conn, $estado, $local, $email, $contpb, $serie, $whatsapp, $solicitante, $defeito, $periodo)
 {
-    global $statusInicial, $novaOS;
+    global $tecLogado, $novaOS;
 
     /* Trata o numero de caracteres que será inserido no campo TB02115_NOME */
     $motivo = substr($defeito, 0, 50);
@@ -98,7 +101,7 @@ function gravaOS($conn, $estado, $local, $email, $contpb, $serie, $whatsapp, $so
                 /* 1: TB02115_CODIGO */ ?, 
                 /* 2: TB02115_DTCAD */ GETDATE(), 
                 /* 5: TB02115_CONTPB */ 0, 
-                /* 6: TB02115_NUMSERIE */ 0, 
+                /* 6: TB02115_NUMSERIE */ TB02054_NUMSERIE, 
                 /* 8: TB02115_STATUS */ '00', --pegar com o fabricio
                 /* 9: TB02115_OPCAD */ 'PAINEL ABERTURA OS',
                 /* 10: TB02115_CODCLI */ '00000000', 
@@ -128,7 +131,7 @@ function gravaOS($conn, $estado, $local, $email, $contpb, $serie, $whatsapp, $so
             AND TB02054_QTPROD > TB02054_QTPRODS
         ";
 
-    $stmt = sqlsrv_query($conn, $sql, array($novaOS));
+    $stmt = sqlsrv_query($conn, $sql, array($novaOS, $tecLogado, '00', $serie));
     if ($stmt === false) {
         return [
             'success' => false,

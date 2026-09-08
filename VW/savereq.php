@@ -1,7 +1,12 @@
 <?php
+ob_start();
 session_start();
 header('Content-type: text/html; charset=ISO-8895-1');
 include_once "../DB/conexaoSQL.php";
+include_once "../DB/testLogin.php";
+
+testLogin($conn);
+
 include_once "../DB/acoesreq.php";
 include_once "../DB/dados.php";
 include_once "../Config.php";
