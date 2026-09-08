@@ -56,11 +56,6 @@ echo $CodEmp;
             <h6 class="msg-os"><? /* PegaTipo($conn, $serie) */ ?></h6>
             <div class="form-group">
                 <div class="form-input">
-                    <label for="estado">Estado *</label>
-                    <input type="text" id="estado" name="estado" placeholder="<?= $estado ?>" value="<?= $estado ?>"
-                        required readonly>
-                </div>
-                <div class="form-input">
                     <label for="serie">Série/Pat *</label>
                     <input id="serie" name="serie" rows="4" placeholder="<?= $serie; ?>" value="<?= $serie ?>" required
                         readonly></input>
@@ -72,79 +67,12 @@ echo $CodEmp;
                     <input type="text" id="cliente" name="cliente" placeholder="<?= $Cliente; ?>"
                         value="<?= $Cliente; ?>" readonly>
                 </div>
-                <div class="form-input">
-                    <label for="local">Local*</label>
-                    <input type="text" id="local" name="local" placeholder="<?= $Local; ?>" value="<?= $Local; ?>"
-                        required>
-                </div>
             </div>
-            <div class="form-group">
-                <div class="form-input">
-                    <label for="solicitante">Solicitante *</label>
-                    <input type="text" id="solicitante" name="solicitante" placeholder="Quem esta abrindo a requisição."
-                        required>
-                </div>
-                <div class="form-input">
-                    <label for="whatsapp">Whatsapp * <small>(00000000000)</small></label>
-                    <input type="text" id="whatsapp" name="whatsapp" placeholder="<?= $Tel ?>" value="<?= $Tel ?>"
-                        required>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="form-input">
-                    <label for="e-mail">E-mail</label>
-                    <input type="text" id="e-mail" name="e-mail" placeholder="<?= $Email; ?>" value="<?= $Email; ?>"
-                        required>
-                </div>
-                <div class="form-input">
-                    <label for="e-mail">Toner PB</label>
-                    <input type="number" id="tonerPB" name="tonerPB" value="0" required>
-                </div>
-            </div>
-            <div class="label-text-toner">
-                <label for="preto">Toner colorido:</label>
-            </div>
-            <div class="form-group">
-                <div class="form-input">
-                    <label for="preto">Preto</label>
-                    <input type="number" id="preto" name="preto" value="0" required>
-                </div>
-                <div class="form-input">
-                    <label for="azul">Azul</label>
-                    <input type="number" id="azul" name="azul" value="0" required>
-                </div>
-                <div class="form-input">
-                    <label for="amarelo">Amarelo</label>
-                    <input type="number" id="amarelo" name="amarelo" value="0" required>
-                </div>
-                <div class="form-input">
-                    <label for="magenta">Magenta</label>
-                    <input type="number" id="magenta" name="magenta" value="0" required>
-                </div>
-                <div class="form-input">
-                    <label for="outro">Outro</label>
-                    <input type="number" id="outro" name="outro" value="0" required>
-                </div>
-            </div>
+           
             <div class="form-group">
                 <div class="form-input">
                     <label for="defeito">Observação*</label>
                     <textarea id="defeito" name="defeito" rows="4" required></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="form-input">
-                    <label for="ultcont">Último Contador</label>
-                    <input class="input-contador" type="number" id="ultcont" name="ultcont"
-                        placeholder="<?= $UltCont; ?>" value="<?= $UltCont; ?>" required>
-                </div>
-                <div class="form-input">
-                    <label for="periodo">Período</label>
-                    <select id="periodo" name="periodo" required>
-                        <option value="Manhã">Manhã</option>
-                        <option value="Tarde">Tarde</option>
-                        <option value="Indiferente">Indiferente</option>
-                    </select>
                 </div>
             </div>
             <div class="btn-index">
